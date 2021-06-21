@@ -1,1 +1,0 @@
-# tim-apigee-configurator-empty-repository-external
