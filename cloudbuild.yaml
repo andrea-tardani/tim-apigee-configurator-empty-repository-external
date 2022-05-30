@@ -1,0 +1,32 @@
+#Setup GCP Project
+
+# project dev -> tim-cdc-col-ct00001139p66-l0
+# artifact registry dev -> europe-west4-docker.pkg.dev/tim-cdc-col-ct00001139p66-l0/co-be-tim-gke-fc-col-cu00000073ar-l9/connectivity-test
+# cluster gke dev -> ct00001139-gkefy2g-fc-col-cluster-1
+
+steps:
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: Setup Project
+    args: ['gcloud', 'config', 'set', 'project', 'tim-cdc-col-ct00001139p66-l0']
+
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: Docker Build
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/test-worker:$COMMIT_SHA'
+      - '.'
+
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: Docker Push
+    args:
+      - 'push'
+      - 'europe-west4-docker.pkg.dev/tim-cdc-col-ct00001139p66-l0/co-be-tim-gke-fc-col-cu00000073ar-l9/connectivity-test/connectivity-test:$COMMIT_SHA'
+
+
+# configure usage of worker pool
+options:
+  pool:
+    name: 'projects/tim-cdc-prd-cu00000313r2-l9/locations/europe-west4/workerPools/swarm-pipeline-core-pool'
