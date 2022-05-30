@@ -10,6 +10,17 @@ steps:
     args: ['gcloud', 'config', 'set', 'project', 'tim-cdc-col-ct00001139p66-l0']
 
 
+  - name: 'ubuntu'
+    id: Store Service Account JSON File
+    entrypoint: bash
+    args: ['gsutil', 'cp', 'gs://tim-cdc-prd-cu00000313r2-l9_cloudbuild/sa-swarm-pipeline__tim-cdc-prd-cu00000313r2-l9-0b36076abe69.json', '/workspace/sa.json']
+
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: Setup Service Account
+    args: ['gcloud', 'auth', 'activate-service-account', '--key-file=sa-swarm-pipeline@tim-cdc-prd-cu00000313r2-l9.iam.gserviceaccount.com', '--key-file=/workspace/sa.json']
+
+
   - name: 'gcr.io/cloud-builders/docker'
     id: Docker Build
     args:
