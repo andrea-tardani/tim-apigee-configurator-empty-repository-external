@@ -22,12 +22,18 @@ steps:
 
 
   - name: 'gcr.io/cloud-builders/docker'
-    id: Docker Build
+    id: Docker Pull
     args:
-      - 'build'
-      - '-t'
-      - 'gcr.io/$PROJECT_ID/test-worker:$COMMIT_SHA'
-      - '.'
+      - 'pull'
+      - 'hashicorp/http-echo'
+
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: Docker Tag
+    args:
+      - 'tag'
+      - 'hashicorp/http-echo'
+      - 'europe-west4-docker.pkg.dev/tim-cdc-col-ct00001139p66-l0/co-be-tim-gke-fc-col-cu00000073ar-l9/connectivity-test/connectivity-test:$COMMIT_SHA'
 
 
   - name: 'gcr.io/cloud-builders/docker'
